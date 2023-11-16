@@ -37,7 +37,7 @@ model User {
   name String
   email String @unique
   password String
-  admiminstrator Boolean @default(false)
+  administrator Boolean @default(false)
   posts Post[]
 
   @@map("users")

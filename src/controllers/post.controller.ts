@@ -3,19 +3,28 @@ import { CreatePostService } from "../services/post/create_post.service";
 import { ListPostService } from "../services/post/list_post.service";
 import { RemovePostService } from "../services/post/remove_post.service";
 import { CountPostService } from "../services/post/count_post.service";
+import { GetUserService } from "../services/user/get_user.service";
 
 export class PostController {
     async create(req: Request, res: Response) {
         try {
-            const { authorId, title, body } = req.body as {
+            const { authorId, title, body, userId } = req.body as {
                 authorId: string;
                 title: string;
                 body: string;
+                userId: string;
             };
-            if (!authorId || !title || !body) {
+
+            if (!authorId || !title || !body || !userId) {
                 throw new Error(
                     "Alguma informação está faltando, verifique e tente novamente."
                 );
+            }
+
+            const hasUser = await new GetUserService().execute(Number(userId));
+
+            if (!hasUser) {
+                throw new Error("Usuário não encontrado!");
             }
 
             if (isNaN(Number(authorId))) {
@@ -26,6 +35,7 @@ export class PostController {
                 authorId: Number(authorId),
                 body,
                 title,
+                userId: Number(userId),
             });
             res.status(201).json({
                 error: false,

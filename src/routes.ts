@@ -2,6 +2,8 @@ import { Request, Response, Router } from "express";
 import multer from "multer";
 import { AuthorController } from "./controllers/author.controller";
 import { PostController } from "./controllers/post.controller";
+import { UserController } from "./controllers/user.controller";
+import { auth } from "./middlewares/auth";
 
 const router = Router();
 
@@ -29,6 +31,7 @@ const upload = multer({
 
 const authorController = new AuthorController();
 const postController = new PostController();
+const userController = new UserController();
 
 router.get("/", (req: Request, res: Response) => {
     res.json("Bem vindo a API");
@@ -36,7 +39,12 @@ router.get("/", (req: Request, res: Response) => {
 
 //recebendo um arquivo via single
 router.post("/author", upload.single("avatar"), authorController.create);
-router.get("/author", upload.single("avatar"), authorController.list);
+router.get(
+    "/author",
+    upload.single("avatar"),
+    auth.private,
+    authorController.list
+);
 router.get("/author/:id", upload.single("avatar"), authorController.getAuthor);
 router.delete("/author/:id", upload.single("avatar"), authorController.remove);
 
@@ -44,6 +52,9 @@ router.post("/post", postController.create);
 router.get("/post", postController.list);
 router.delete("/post/:id", postController.remove);
 router.get("/post/count", postController.count);
+
+router.post("/user", userController.create);
+router.post("/login", userController.login);
 
 //recebendo varios arquivos via array
 /* router.post(
