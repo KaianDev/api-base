@@ -39,18 +39,14 @@ router.get("/", (req: Request, res: Response) => {
 
 //recebendo um arquivo via single
 router.post("/author", upload.single("avatar"), authorController.create);
-router.get(
-    "/author",
-    upload.single("avatar"),
-    auth.private,
-    authorController.list
-);
+router.get("/author", upload.single("avatar"), authorController.list);
 router.get("/author/:id", upload.single("avatar"), authorController.getAuthor);
 router.delete("/author/:id", upload.single("avatar"), authorController.remove);
 
-router.post("/post", postController.create);
+router.post("/post", auth.private, postController.create);
 router.get("/post", postController.list);
 router.delete("/post/:id", postController.remove);
+router.get("/post/:id", postController.getPost);
 router.get("/post/count", postController.count);
 
 router.post("/user", userController.create);

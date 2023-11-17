@@ -4,6 +4,7 @@ import { ListPostService } from "../services/post/list_post.service";
 import { RemovePostService } from "../services/post/remove_post.service";
 import { CountPostService } from "../services/post/count_post.service";
 import { GetUserService } from "../services/user/get_user.service";
+import { GetPostService } from "../services/post/getpost_service";
 
 export class PostController {
     async create(req: Request, res: Response) {
@@ -101,5 +102,24 @@ export class PostController {
         const count = await new CountPostService().execute();
 
         res.json({ count });
+    }
+
+    async getPost(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+
+            if (!id || isNaN(Number(id))) throw new Error("ID inválido");
+
+            const post = await new GetPostService().execute(Number(id));
+
+            res.json({
+                body: post,
+            });
+        } catch (error: any) {
+            res.status(400).json({
+                error: true,
+                message: error.message,
+            });
+        }
     }
 }
