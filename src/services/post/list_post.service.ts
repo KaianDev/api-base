@@ -13,6 +13,9 @@ export class ListPostService {
             },
             skip,
             take: take && take,
+            orderBy: {
+                createAt: "desc",
+            },
         });
 
         if (!posts) throw new Error("Nenhum post para listar!");
