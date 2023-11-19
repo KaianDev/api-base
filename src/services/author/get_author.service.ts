@@ -7,7 +7,9 @@ export class GetAuthorService {
                 id,
             },
             include: {
-                posts: true,
+                posts: {
+                    orderBy: { createAt: "desc" },
+                },
             },
         });
 
