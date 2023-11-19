@@ -5,6 +5,7 @@ import { RemovePostService } from "../services/post/remove_post.service";
 import { CountPostService } from "../services/post/count_post.service";
 import { GetUserService } from "../services/user/get_user.service";
 import { GetPostService } from "../services/post/getpost_service";
+import { SearchPostService } from "../services/post/search_post.service";
 
 export class PostController {
     async create(req: Request, res: Response) {
@@ -114,6 +115,36 @@ export class PostController {
 
             res.json({
                 body: post,
+            });
+        } catch (error: any) {
+            res.status(400).json({
+                error: true,
+                message: error.message,
+            });
+        }
+    }
+
+    async search(req: Request, res: Response) {
+        try {
+            const { authorId, search } = req.query as {
+                authorId: string;
+                search: string;
+            };
+
+            if (!authorId || !search)
+                throw new Error("Os campos autor e pesquisa é obrigatório!");
+
+            const posts = await new SearchPostService().execute({
+                authorId: Number(authorId),
+                search,
+            });
+
+            if (!posts || posts.length === 0)
+                throw new Error(`Nenhum resultado encontrado para ${search}`);
+
+            res.json({
+                error: false,
+                body: posts,
             });
         } catch (error: any) {
             res.status(400).json({

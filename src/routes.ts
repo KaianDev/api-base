@@ -47,6 +47,7 @@ router.post("/post", auth.private, postController.create);
 router.get("/post", postController.list);
 router.delete("/post/:id", postController.remove);
 router.get("/post/count", postController.count);
+router.get("/post/search", postController.search);
 router.get("/post/:id", postController.getPost);
 
 router.post("/user", userController.create);
