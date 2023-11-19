@@ -46,13 +46,13 @@ router.delete("/author/:id", upload.single("avatar"), authorController.remove);
 router.post("/post", auth.private, postController.create);
 router.get("/post", postController.list);
 router.delete("/post/:id", postController.remove);
-router.get("/post/:id", postController.getPost);
 router.get("/post/count", postController.count);
+router.get("/post/:id", postController.getPost);
 
 router.post("/user", userController.create);
 router.post("/login", userController.login);
 
-//recebendo varios arquivos via array
+//recebendo vários arquivos via array
 /* router.post(
     "/uploads",
     upload.array("photos", 2),
