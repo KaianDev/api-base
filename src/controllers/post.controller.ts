@@ -126,17 +126,12 @@ export class PostController {
 
     async search(req: Request, res: Response) {
         try {
-            const { authorId, search } = req.query as {
-                authorId: string;
-                search: string;
-            };
+            const search = req.query.q as string;
 
-            if (!authorId || !search)
-                throw new Error("Os campos autor e pesquisa é obrigatório!");
+            if (!search) return;
 
             const posts = await new SearchPostService().execute({
-                authorId: Number(authorId),
-                search,
+                q: search,
             });
 
             if (!posts || posts.length === 0)

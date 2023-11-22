@@ -1,17 +1,15 @@
 import { prisma } from "../../database/prismaClient";
 
 interface ISearchPostService {
-    authorId: number;
-    search: string;
+    q: string;
 }
 
 export class SearchPostService {
-    async execute({ authorId, search }: ISearchPostService) {
+    async execute({ q }: ISearchPostService) {
         const posts = await prisma.post.findMany({
             where: {
-                authorId,
                 body: {
-                    contains: search,
+                    contains: q,
                     mode: "insensitive",
                 },
             },
